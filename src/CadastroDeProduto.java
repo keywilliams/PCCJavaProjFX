@@ -15,9 +15,7 @@ import javax.swing.JOptionPane;
 
 public class CadastroDeProduto {
     private Stage Palco;
-
     private Scene Cena;
-
     private Parent Raiz;
 
     @FXML

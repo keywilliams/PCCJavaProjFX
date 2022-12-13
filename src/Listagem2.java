@@ -15,9 +15,7 @@ import javax.swing.JOptionPane;
 public class Listagem2 {
 
         private Stage Palco;
-
         private Scene Cena;
-
         private Parent Raiz;
 
     @FXML
@@ -71,13 +69,9 @@ public class Listagem2 {
     void AcaoCadastroProduto(ActionEvent event)  throws IOException {
 
         Raiz = FXMLLoader.load(getClass().getResource("CadastroDeProduto.fxml"));
-
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         Cena = new Scene(Raiz);
-
         Palco.setScene(Cena);
-
         Palco.show();
     }
 
@@ -85,13 +79,9 @@ public class Listagem2 {
     void AcaoEntradaMercadoria(ActionEvent event)  throws IOException {
 
         Raiz = FXMLLoader.load(getClass().getResource("EntradaDeMercadoria.fxml"));
-
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         Cena = new Scene(Raiz);
-
         Palco.setScene(Cena);
-
         Palco.show();
     }
 
@@ -104,13 +94,9 @@ public class Listagem2 {
     void AcaoSaidaMercadoria(ActionEvent event)  throws IOException {
 
         Raiz = FXMLLoader.load(getClass().getResource("SaidaDeMercadoria.fxml"));
-
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         Cena = new Scene(Raiz);
-
         Palco.setScene(Cena);
-
         Palco.show();
     }
 
@@ -118,13 +104,9 @@ public class Listagem2 {
     void AcaoSair(ActionEvent event) throws IOException {
 
         Raiz = FXMLLoader.load(getClass().getResource("Login.fxml"));
-
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         Cena = new Scene(Raiz);
-
         Palco.setScene(Cena);
-
         Palco.show();
     }
 
@@ -132,13 +114,9 @@ public class Listagem2 {
     void AcaoVoltarPaginaInicial(ActionEvent event) throws IOException {
 
         Raiz = FXMLLoader.load(getClass().getResource("PaginaInicial.fxml"));
-
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         Cena = new Scene(Raiz);
-
         Palco.setScene(Cena);
-
         Palco.show();
     }
     @FXML
