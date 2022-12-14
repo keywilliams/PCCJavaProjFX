@@ -56,7 +56,7 @@ public class PaginaInicial {
     @FXML
     void AcaoListagem(ActionEvent event) throws IOException {
 
-        Raiz = FXMLLoader.load(getClass().getResource("Listagem2.fxml"));
+        Raiz = FXMLLoader.load(getClass().getResource("Listagem.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Cena = new Scene(Raiz);
         Palco.setScene(Cena);

@@ -8,7 +8,6 @@ public class Database {
 
     private static String usuarioDB = "root";
     private static String senhaDB = "Qwerty12";
-    //private static String senhaDB = "mhbg8pq5";
 
     public Boolean ValidarUsuarioESenha(String usuario, String senha) {
         try {
@@ -104,11 +103,70 @@ public class Database {
         }
     }
 
+    public Boolean CadastrarSaida(Saida saida) {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            //Query to retrieve records
+            String query = "SELECT * FROM saidas";
+            //Executing the query
+            ResultSet rs = stmt.executeQuery(query);
+            rs.last();
+            int id = rs.getInt("Id")+1;
+            rs.moveToInsertRow();
+            rs.updateInt("Id", id);
+            rs.updateString("CodigoProduto", saida.CodigoProduto);
+            rs.updateString("Descricao", saida.Descricao);
+            rs.updateInt("Quantidade", saida.Quantidade);
+            rs.updateDouble("ValorTotal", saida.ValorTotal);
+            rs.updateString("Motivo", saida.Motivo);
+            rs.insertRow();
+            rs.beforeFirst();
+            if (!rs.isBeforeFirst()) {
+                return false;
+            }
+            con.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Boolean CadastrarEntrada(Entrada entrada) {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            //Query to retrieve records
+            String query = "SELECT * FROM entradas";
+            //Executing the query
+            ResultSet rs = stmt.executeQuery(query);
+            rs.last();
+            int id = rs.getInt("Id")+1;
+            rs.moveToInsertRow();
+            rs.updateInt("Id", id);
+            rs.updateString("NumeroFatura", entrada.NumeroFatura);
+            rs.updateString("DataFatura", entrada.DataFatura);
+            rs.updateString("CodigoProduto", entrada.CodigoProduto);
+            rs.updateString("Descricao", entrada.Descricao);
+            rs.updateInt("Quantidade", entrada.Quantidade);
+            rs.updateDouble("ValorTotal", entrada.ValorTotal);
+            rs.insertRow();
+            rs.beforeFirst();
+            if (!rs.isBeforeFirst()) {
+                return false;
+            }
+            con.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public Boolean AlterarProduto(Produto produto) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
             // create the java mysql update preparedstatement
-            String query = "UPDATE pccjavaprojfx.produtos SET Descricao = ?, Quantidade = ?, Valor = ?, Observacoes = ?, Alterar = ? WHERE Codigo = ?";
+            String query = "UPDATE produtos SET Descricao = ?, Quantidade = ?, Valor = ?, Observacoes = ?, Alterar = ? WHERE Codigo = ?";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
             preparedStmt.setString(1, produto.Descricao);
             preparedStmt.setInt(2, produto.Quantidade);
@@ -116,6 +174,25 @@ public class Database {
             preparedStmt.setString(4, produto.Observacoes);
             preparedStmt.setBoolean(5, false);
             preparedStmt.setString(6, produto.Codigo);
+
+            // execute the java preparedstatement
+            preparedStmt.executeUpdate();
+            conn.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Boolean AlterarQuantidadeProduto(String codigo, Integer quantidade) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            // create the java mysql update preparedstatement
+            String query = "UPDATE produtos SET Quantidade = ?, Alterar = ? WHERE Codigo = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, quantidade);
+            preparedStmt.setBoolean(2, false);
+            preparedStmt.setString(3, codigo);
 
             // execute the java preparedstatement
             preparedStmt.executeUpdate();
@@ -172,6 +249,27 @@ public class Database {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM produtos WHERE Alterar = 1");
+            Produto produto = new Produto();
+            while (rs.next()) {
+                produto.Codigo = rs.getString("Codigo");
+                produto.Descricao = rs.getString("Descricao");
+                produto.Quantidade = rs.getInt("Quantidade");
+                produto.Valor = rs.getDouble("Valor");
+                produto.Observacoes = rs.getString("Observacoes");
+                break;
+              }
+            con.close();
+            return produto;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Produto ObterProdutoPorCodigo(String codigo) {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM produtos WHERE Codigo = '"+codigo+"'");
             Produto produto = new Produto();
             while (rs.next()) {
                 produto.Codigo = rs.getString("Codigo");

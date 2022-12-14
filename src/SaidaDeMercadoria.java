@@ -1,5 +1,7 @@
 import java.net.URL;
 import java.util.ResourceBundle;
+import javax.swing.JOptionPane;
+import Modelos.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,9 +15,7 @@ import java.io.IOException;
 
 public class SaidaDeMercadoria {
     private Stage Palco;
-
     private Scene Cena;
-
     private Parent Raiz;
 
     @FXML
@@ -47,20 +47,72 @@ public class SaidaDeMercadoria {
 
     @FXML
     void AcaoSalvarSaida(ActionEvent event) {
+        String codigoProduto = txtCodigoProduto.getText().trim();
+        String descricao = txtDescricao.getText().trim();
+        String quantidade = txtQuantidade.getText().trim();
+        String valorTotal = txtValorTotal.getText().trim();
+        String motivo = txtMotivo.getText().trim();
 
+        if(codigoProduto.isEmpty() || codigoProduto == null){
+            JOptionPane.showMessageDialog(null, "Código do Produto é obrigatório!");
+            return;
+        }
+
+        if(descricao.isEmpty() || descricao == null){
+            JOptionPane.showMessageDialog(null, "Descrição é obrigatório!");
+            return;
+        }
+
+        if(quantidade.isEmpty() || quantidade == null){
+            JOptionPane.showMessageDialog(null, "Quantidade é obrigatório!");
+            return;
+        }else if (!quantidade.matches("[0-9]*")){
+            JOptionPane.showMessageDialog(null, "Quantidade invalida!");
+            return;
+        }
+
+        if(valorTotal.isEmpty() || valorTotal == null){
+            JOptionPane.showMessageDialog(null, "Valor Total é obrigatório!");
+            return;
+        }
+        else if(!isNumeric(valorTotal)){
+            JOptionPane.showMessageDialog(null, "Valor Total invalido!");
+            return;
+        }
+
+        if(motivo.isEmpty() || motivo == null){
+            JOptionPane.showMessageDialog(null, "Observações é obrigatório!");
+            return;
+        }
+
+        Saida saida = new Saida(codigoProduto, descricao, Integer.parseInt(quantidade), Double.parseDouble(valorTotal), motivo);
+
+        Database database = new Database();
+        boolean cadastradoSaida = database.CadastrarSaida(saida);
+
+        Produto produto = database.ObterProdutoPorCodigo(saida.CodigoProduto);
+        boolean alteradoProduto = database.AlterarQuantidadeProduto(saida.CodigoProduto, (produto.Quantidade - saida.Quantidade));
+
+        if(alteradoProduto && cadastradoSaida){
+            txtCodigoProduto.clear();
+            txtDescricao.clear();
+
+            JOptionPane.showMessageDialog(null, "Saida cadastrado!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Saida não cadastrado!");
+        }
     }
 
     @FXML
     void AcaoVoltarPaginaInicial(ActionEvent event) throws IOException {
 
-        Raiz = FXMLLoader.load(getClass().getResource("Listagem2.fxml"));
-
+        Database database = new Database();
+        database.SetAlterar(txtCodigoProduto.getText(), false);
+        
+        Raiz = FXMLLoader.load(getClass().getResource("Listagem.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         Cena = new Scene(Raiz);
-
         Palco.setScene(Cena);
-
         Palco.show();
     }
 
@@ -73,7 +125,24 @@ public class SaidaDeMercadoria {
         assert txtMotivo != null : "fx:id=\"txtMotivo\" was not injected: check your FXML file 'SaidaDeMercadoria.fxml'.";
         assert txtQuantidade != null : "fx:id=\"txtQuantidade\" was not injected: check your FXML file 'SaidaDeMercadoria.fxml'.";
         assert txtValorTotal != null : "fx:id=\"txtValorTotal\" was not injected: check your FXML file 'SaidaDeMercadoria.fxml'.";
+        
+        Database database = new Database();
+        Produto produto = database.ObterProdutoPorAlterar();
 
+        txtCodigoProduto.setText(produto.Codigo);
+        txtDescricao.setText(produto.Descricao);
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
 }

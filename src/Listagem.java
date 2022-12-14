@@ -19,12 +19,12 @@ import javax.swing.JOptionPane;
 
 import Modelos.*;
 
-public class Listagem2 {
+public class Listagem {
 
-        private Stage Palco;
-        private Scene Cena;
-        private Parent Raiz;
-        private String Codigo;
+    private Stage Palco;
+    private Scene Cena;
+    private Parent Raiz;
+    private String Codigo;
 
     @FXML
     private ResourceBundle resources;
@@ -69,89 +69,87 @@ public class Listagem2 {
     private ListView<String> lvValorTotal;
 
     @FXML
-    void AcaoAlterar(ActionEvent event)  throws IOException {
+    void AcaoAlterar(ActionEvent event) throws IOException {
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Usuario user = (Usuario) Palco.getUserData();
-        if(user.CadastroProduto){
-            if(Codigo == null || Codigo.isEmpty()){
+        if (user.CadastroProduto) {
+            if (Codigo == null || Codigo.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Selecione um produto");
-            }else{
+            } else {
                 Database database = new Database();
                 Boolean setado = database.SetAlterar(Codigo, true);
-                if(setado){
+                if (setado) {
                     Raiz = FXMLLoader.load(getClass().getResource("AlteracaoDeProduto.fxml"));
                     Cena = new Scene(Raiz);
                     Palco.setScene(Cena);
                     Palco.show();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Problemas ao obter dados do produto " + Codigo);
                 }
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
         }
     }
 
     @FXML
-    void AcaoCadastroProduto(ActionEvent event)  throws IOException {
+    void AcaoCadastroProduto(ActionEvent event) throws IOException {
 
         Raiz = FXMLLoader.load(getClass().getResource("CadastroDeProduto.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         Usuario user = (Usuario) Palco.getUserData();
-        if(user.CadastroProduto){
+        if (user.CadastroProduto) {
             Cena = new Scene(Raiz);
             Palco.setScene(Cena);
             Palco.show();
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
         }
     }
 
     @FXML
-    void AcaoEntradaMercadoria(ActionEvent event)  throws IOException {
+    void AcaoEntradaMercadoria(ActionEvent event) throws IOException {
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        
+
         Usuario user = (Usuario) Palco.getUserData();
-        if(user.EntradaMercadoria){
-            if(Codigo == null || Codigo.isEmpty()){
+        if (user.EntradaMercadoria) {
+            if (Codigo == null || Codigo.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Selecione um produto");
+            } else {
+                Database database = new Database();
+                Boolean setado = database.SetAlterar(Codigo, true);
+                if (setado) {
+                    Raiz = FXMLLoader.load(getClass().getResource("EntradaDeMercadoria.fxml"));
+                    Cena = new Scene(Raiz);
+                    Palco.setScene(Cena);
+                    Palco.show();
+                }
             }
-            else{
-                Raiz = FXMLLoader.load(getClass().getResource("EntradaDeMercadoria.fxml"));
-                Cena = new Scene(Raiz);
-                Palco.setScene(Cena);
-                Palco.show();
-            }
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
         }
     }
 
     @FXML
-    void AcaoImprimir(ActionEvent event) {
-
-    }
-
-    @FXML
-    void AcaoSaidaMercadoria(ActionEvent event)  throws IOException {
+    void AcaoSaidaMercadoria(ActionEvent event) throws IOException {
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        
+
         Usuario user = (Usuario) Palco.getUserData();
-        if(user.SaidaMercadoria){
-            if(Codigo == null || Codigo.isEmpty()){
+        if (user.SaidaMercadoria) {
+            if (Codigo == null || Codigo.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Selecione um produto");
+            } else {
+                Database database = new Database();
+                Boolean setado = database.SetAlterar(Codigo, true);
+                if (setado) {
+                    Raiz = FXMLLoader.load(getClass().getResource("SaidaDeMercadoria.fxml"));
+                    Cena = new Scene(Raiz);
+                    Palco.setScene(Cena);
+                    Palco.show();
+                }
             }
-            else{
-                Raiz = FXMLLoader.load(getClass().getResource("SaidaDeMercadoria.fxml"));
-                Cena = new Scene(Raiz);
-                Palco.setScene(Cena);
-                Palco.show();
-            }
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
         }
     }
@@ -175,21 +173,22 @@ public class Listagem2 {
         Palco.setScene(Cena);
         Palco.show();
     }
+
     @FXML
     void initialize() {
         PreencherLista();
 
-        assert btnAlterar != null : "fx:id=\"btnAlterar\" was not injected: check your FXML file 'Listagem2.fxml'.";
+        assert btnAlterar != null : "fx:id=\"btnAlterar\" was not injected: check your FXML file 'Listagem.fxml'.";
         assert btnCadastroProduto != null
-                : "fx:id=\"btnCadastroProduto\" was not injected: check your FXML file 'Listagem2.fxml'.";
+                : "fx:id=\"btnCadastroProduto\" was not injected: check your FXML file 'Listagem.fxml'.";
         assert btnEntradaMercadoria != null
-                : "fx:id=\"btnEntradaMercadoria\" was not injected: check your FXML file 'Listagem2.fxml'.";
-        assert btnImprimir != null : "fx:id=\"btnImprimir\" was not injected: check your FXML file 'Listagem2.fxml'.";
+                : "fx:id=\"btnEntradaMercadoria\" was not injected: check your FXML file 'Listagem.fxml'.";
+        assert btnImprimir != null : "fx:id=\"btnImprimir\" was not injected: check your FXML file 'Listagem.fxml'.";
         assert btnSaidaMercadoria != null
-                : "fx:id=\"btnSaidaMercadoria\" was not injected: check your FXML file 'Listagem2.fxml'.";
-        assert btnSair != null : "fx:id=\"btnSair\" was not injected: check your FXML file 'Listagem2.fxml'.";
+                : "fx:id=\"btnSaidaMercadoria\" was not injected: check your FXML file 'Listagem.fxml'.";
+        assert btnSair != null : "fx:id=\"btnSair\" was not injected: check your FXML file 'Listagem.fxml'.";
         assert btnVoltarPaginaInicial != null
-                : "fx:id=\"btnVoltarPaginaInicial\" was not injected: check your FXML file 'Listagem2.fxml'.";
+                : "fx:id=\"btnVoltarPaginaInicial\" was not injected: check your FXML file 'Listagem.fxml'.";
 
     }
 
@@ -197,14 +196,13 @@ public class Listagem2 {
         Database database = new Database();
         List<Produto> produtos = database.ObterProdutos();
 
-        for (int i = 0; i < produtos.size(); i++) 
-        { 
+        for (int i = 0; i < produtos.size(); i++) {
             Produto produto = produtos.get(i);
             lvCodProduto.getItems().add(produto.Codigo);
             lvDescricao.getItems().add(produto.Descricao);
             lvQuantidade.getItems().add(produto.Quantidade.toString());
-            lvValor.getItems().add(produto.Valor.toString());
-            lvValorTotal.getItems().add(produto.ValorTotal.toString());
+            lvValor.getItems().add(String.format("%.2f", produto.Valor));
+            lvValorTotal.getItems().add(String.format("%.2f", produto.ValorTotal));
         }
 
         lvCodProduto.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {

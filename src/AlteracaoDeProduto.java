@@ -105,7 +105,7 @@ public class AlteracaoDeProduto {
         Database database = new Database();
         database.SetAlterar(txtCodigoProduto.getText(), false);
 
-        Raiz = FXMLLoader.load(getClass().getResource("Listagem2.fxml"));
+        Raiz = FXMLLoader.load(getClass().getResource("Listagem.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Cena = new Scene(Raiz);
         Palco.setScene(Cena);
