@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
+import Modelos.*;
+
 
 public class CadastroDeProduto {
     private Stage Palco;
@@ -85,8 +87,10 @@ public class CadastroDeProduto {
             return;
         }
 
+        Produto produto = new Produto(codigoProduto, descricao, Integer.parseInt(quantidade), Double.parseDouble(valorUnt), observacoes);
+
         Database database = new Database();
-        boolean cadastrado = database.CadastrarProduto(codigoProduto, descricao, quantidade, valorUnt, observacoes);
+        boolean cadastrado = database.CadastrarProduto(produto);
 
         if(cadastrado){
             txtCodigoProduto.clear();

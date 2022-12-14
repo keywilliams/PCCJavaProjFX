@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javax.swing.JOptionPane;
 
+import Modelos.*;
+
 public class Listagem2 {
 
         private Stage Palco;
@@ -70,9 +72,16 @@ public class Listagem2 {
 
         Raiz = FXMLLoader.load(getClass().getResource("CadastroDeProduto.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Cena = new Scene(Raiz);
-        Palco.setScene(Cena);
-        Palco.show();
+
+        Usuario user = (Usuario) Palco.getUserData();
+        if(user.CadastroProduto){
+            Cena = new Scene(Raiz);
+            Palco.setScene(Cena);
+            Palco.show();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
+        }
     }
 
     @FXML
@@ -80,9 +89,16 @@ public class Listagem2 {
 
         Raiz = FXMLLoader.load(getClass().getResource("EntradaDeMercadoria.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Cena = new Scene(Raiz);
-        Palco.setScene(Cena);
-        Palco.show();
+        
+        Usuario user = (Usuario) Palco.getUserData();
+        if(user.EntradaMercadoria){
+            Cena = new Scene(Raiz);
+            Palco.setScene(Cena);
+            Palco.show();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
+        }
     }
 
     @FXML
@@ -95,9 +111,16 @@ public class Listagem2 {
 
         Raiz = FXMLLoader.load(getClass().getResource("SaidaDeMercadoria.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Cena = new Scene(Raiz);
-        Palco.setScene(Cena);
-        Palco.show();
+        
+        Usuario user = (Usuario) Palco.getUserData();
+        if(user.SaidaMercadoria){
+            Cena = new Scene(Raiz);
+            Palco.setScene(Cena);
+            Palco.show();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Usuário: " + user.Nome + " não tem permissão.");
+        }
     }
 
     @FXML

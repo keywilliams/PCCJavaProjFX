@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
+
+import Modelos.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,21 +56,24 @@ public class Login {
         boolean isValid = database.ValidarUsuarioESenha(usuario, senha);
 
         if(isValid){
-            Entrar(event);
+            Usuario user = database.ObterUsuario(usuario);
+            Entrar(event, user);
         }
         else {
             if (usuario.equals("Adm") && senha.equals("123456")) {
-                Entrar(event);
+                Usuario userAdm = new Usuario("Adm", "123456", true, true, true, true);
+                Entrar(event, userAdm);
             } else {
                 JOptionPane.showMessageDialog(null, "Dados Incorretos!");
             }
         }
     }
 
-    private void Entrar(ActionEvent event) throws IOException {
+    private void Entrar(ActionEvent event, Usuario usuario) throws IOException {
         Raiz = FXMLLoader.load(getClass().getResource("PaginaInicial.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Cena = new Scene(Raiz);
+        Palco.setUserData(usuario);
         Palco.setScene(Cena);
         Palco.show();
     }

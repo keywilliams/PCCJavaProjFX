@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+
+import Modelos.*;
 import javafx.scene.control.CheckBox;
 
 public class CadastroUsuario {
@@ -70,8 +72,9 @@ public class CadastroUsuario {
             return;
         }
 
+        Usuario user = new Usuario(usuario, senha, cadastroProduto, entradaMercadoria, saidaMercadoria, false);
         Database database = new Database();
-        boolean cadastrado = database.CadastrarUsuario(usuario, senha, cadastroProduto, entradaMercadoria, saidaMercadoria);
+        boolean cadastrado = database.CadastrarUsuario(user);
 
         if(cadastrado){
             txtUsuario.clear();
