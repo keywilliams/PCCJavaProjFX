@@ -15,11 +15,11 @@ import javax.swing.JOptionPane;
 import Modelos.*;
 
 
-public class CadastroDeProduto {
+public class AlteracaoDeProduto {
     private Stage Palco;
     private Scene Cena;
     private Parent Raiz;
-
+    
     @FXML
     private ResourceBundle resources;
 
@@ -27,7 +27,7 @@ public class CadastroDeProduto {
     private URL location;
 
     @FXML
-    private Button btnSalvarCadastro;
+    private Button btnAlterarProduto;
 
     @FXML
     private Button btnVoltarPaginaInicial;
@@ -48,7 +48,7 @@ public class CadastroDeProduto {
     private TextField txtValorUnt;
 
     @FXML
-    void AcaoSalvarProduto(ActionEvent event) {
+    void AcaoAlterarProduto(ActionEvent event) {
         String codigoProduto = txtCodigoProduto.getText().trim();
         String descricao = txtDescricao.getText().trim();
         String quantidade = txtQuantidade.getText().trim();
@@ -90,23 +90,20 @@ public class CadastroDeProduto {
         Produto produto = new Produto(codigoProduto, descricao, Integer.parseInt(quantidade), Double.parseDouble(valorUnt), observacoes);
 
         Database database = new Database();
-        boolean cadastrado = database.CadastrarProduto(produto);
+        boolean cadastrado = database.AlterarProduto(produto);
 
         if(cadastrado){
-            txtCodigoProduto.clear();
-            txtDescricao.clear();
-            txtQuantidade.clear();
-            txtValorUnt.clear();
-            txtObservacoes.clear();
-
-            JOptionPane.showMessageDialog(null, "Produto cadastrado!");
+            JOptionPane.showMessageDialog(null, "Produto alterado!");
         }else{
-            JOptionPane.showMessageDialog(null, "Produto não cadastrado!");
+            JOptionPane.showMessageDialog(null, "Produto não alterado!");
         }
     }
 
     @FXML
     void AcaoVoltarPaginaInicial(ActionEvent event) throws IOException {
+
+        Database database = new Database();
+        database.SetAlterar(txtCodigoProduto.getText(), false);
 
         Raiz = FXMLLoader.load(getClass().getResource("Listagem2.fxml"));
         Palco = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -117,14 +114,22 @@ public class CadastroDeProduto {
 
     @FXML
     void initialize() {
-        assert btnSalvarCadastro != null : "fx:id=\"btnSalvarCadastro\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
-        assert btnVoltarPaginaInicial != null : "fx:id=\"btnVoltarPaginaInicial\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
-        assert txtCodigoProduto != null : "fx:id=\"txtCodigoProduto\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
-        assert txtDescricao != null : "fx:id=\"txtDescricao\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
-        assert txtObservacoes != null : "fx:id=\"txtObservacoes\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
-        assert txtQuantidade != null : "fx:id=\"txtQuantidade\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
-        assert txtValorUnt != null : "fx:id=\"txtValorUnt\" was not injected: check your FXML file 'CadastroDeProduto.fxml'.";
+        assert btnAlterarProduto != null : "fx:id=\"btnAlterarProduto\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
+        assert btnVoltarPaginaInicial != null : "fx:id=\"btnVoltarPaginaInicial\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
+        assert txtCodigoProduto != null : "fx:id=\"txtCodigoProduto\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
+        assert txtDescricao != null : "fx:id=\"txtDescricao\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
+        assert txtObservacoes != null : "fx:id=\"txtObservacoes\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
+        assert txtQuantidade != null : "fx:id=\"txtQuantidade\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
+        assert txtValorUnt != null : "fx:id=\"txtValorUnt\" was not injected: check your FXML file 'AlteracaoDeProduto.fxml'.";
 
+        Database database = new Database();
+        Produto produto = database.ObterProdutoPorAlterar();
+
+        txtCodigoProduto.setText(produto.Codigo);
+        txtDescricao.setText(produto.Descricao);
+        txtObservacoes.setText(produto.Observacoes);
+        txtQuantidade.setText(produto.Quantidade.toString());
+        txtValorUnt.setText(produto.Valor.toString());
     }
 
     public static boolean isNumeric(String strNum) {
@@ -138,4 +143,5 @@ public class CadastroDeProduto {
         }
         return true;
     }
+
 }

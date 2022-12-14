@@ -8,6 +8,8 @@ public class Usuario {
     public boolean SaidaMercadoria;
     public boolean Admin;
 
+    public Produto Produto;
+
     public Usuario() {
         super();
     }

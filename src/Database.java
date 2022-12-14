@@ -1,13 +1,16 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import Modelos.*;
 
 public class Database {
 
     private static String usuarioDB = "root";
     private static String senhaDB = "Qwerty12";
-    // private static String senhaDB = "mhbg8pq5";
+    //private static String senhaDB = "mhbg8pq5";
 
-    public boolean ValidarUsuarioESenha(String usuario, String senha) {
+    public Boolean ValidarUsuarioESenha(String usuario, String senha) {
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
             Statement stmt = con.createStatement();
@@ -43,7 +46,7 @@ public class Database {
         }
     }
 
-    public boolean CadastrarUsuario(Usuario user) {
+    public Boolean CadastrarUsuario(Usuario user) {
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -72,7 +75,7 @@ public class Database {
         }
     }
 
-    public boolean CadastrarProduto(Produto produto) {
+    public Boolean CadastrarProduto(Produto produto) {
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -98,6 +101,90 @@ public class Database {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public Boolean AlterarProduto(Produto produto) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            // create the java mysql update preparedstatement
+            String query = "UPDATE pccjavaprojfx.produtos SET Descricao = ?, Quantidade = ?, Valor = ?, Observacoes = ?, Alterar = ? WHERE Codigo = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, produto.Descricao);
+            preparedStmt.setInt(2, produto.Quantidade);
+            preparedStmt.setDouble(3, produto.Valor);
+            preparedStmt.setString(4, produto.Observacoes);
+            preparedStmt.setBoolean(5, false);
+            preparedStmt.setString(6, produto.Codigo);
+
+            // execute the java preparedstatement
+            preparedStmt.executeUpdate();
+            conn.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<Produto> ObterProdutos() {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM produtos");
+            List<Produto> produtos = new ArrayList<Produto>();
+            while (rs.next()) {
+                Produto produto = new Produto();
+                produto.Codigo = rs.getString("Codigo");
+                produto.Descricao = rs.getString("Descricao");
+                produto.Quantidade = rs.getInt("Quantidade");
+                produto.Valor = rs.getDouble("Valor");
+                produto.Observacoes = rs.getString("Observacoes");
+                produto.ValorTotal = produto.Valor * produto.Quantidade;
+                produtos.add(produto);
+              }
+            con.close();
+            return produtos;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Boolean SetAlterar(String codigo, Boolean alterar) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            // create the java mysql update preparedstatement
+            String query = "UPDATE produtos SET Alterar = ? WHERE Codigo = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setBoolean(1, alterar);
+            preparedStmt.setString(2, codigo);
+
+            // execute the java preparedstatement
+            preparedStmt.executeUpdate();
+            conn.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Produto ObterProdutoPorAlterar() {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pccjavaprojfx", usuarioDB, senhaDB);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM produtos WHERE Alterar = 1");
+            Produto produto = new Produto();
+            while (rs.next()) {
+                produto.Codigo = rs.getString("Codigo");
+                produto.Descricao = rs.getString("Descricao");
+                produto.Quantidade = rs.getInt("Quantidade");
+                produto.Valor = rs.getDouble("Valor");
+                produto.Observacoes = rs.getString("Observacoes");
+                break;
+              }
+            con.close();
+            return produto;
+        } catch (Exception e) {
+            return null;
         }
     }
 }
